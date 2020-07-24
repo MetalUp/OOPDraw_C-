@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Drawing;
 
 namespace OOPDraw
 {
     public class Circle : Shape
     {
-        public Circle(Pen p, int x1, int y1) : base(p, x1, y1)
+        public Circle(string colour, float lineWidth, int x1, int y1) : base(colour, lineWidth, x1, y1)
         {
         }
 
-        public Circle(Pen p, int x1, int y1, int x2, int y2) : base(p, x1, y1, x2, y2)
+        [JsonConstructor]
+        public Circle(string colour, float lineWidth, int x1, int y1, int x2, int y2) : base(colour, lineWidth, x1, y1, x2, y2)
         {
             GrowTo(x2, y2);
         }
@@ -28,7 +30,7 @@ namespace OOPDraw
 
         public override Shape Clone()
         {
-            return new Circle(Pen, X1, Y1, X2, Y2);
+            return new Circle(Colour, LineWidth, X1, Y1, X2, Y2);
         }
     }
 }

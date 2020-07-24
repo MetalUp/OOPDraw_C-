@@ -9,7 +9,7 @@ namespace OOPDraw
             (int x, int y, int w, int h) = shape.EnclosingRectangle();
             if (w > 0 && h > 0)
             {
-                g.DrawArc(shape.Pen, x, y, w, h, 0F, 360F);
+                g.DrawArc(shape.Pen(), x, y, w, h, 0F, 360F);
             }
         }
     }

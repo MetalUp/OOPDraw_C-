@@ -1,21 +1,24 @@
-﻿using System.Drawing;
+﻿using Newtonsoft.Json;
+using System;
+using System.Drawing;
 
 namespace OOPDraw
 {
     public class Rectangle : Shape
     {
-        public Rectangle(Pen p, int x1, int y1, int x2, int y2) : base(p, x1, y1, x2, y2)
+        [JsonConstructor]
+        public Rectangle(string colour, float lineWidth, int x1, int y1, int x2, int y2) : base(colour, lineWidth, x1, y1, x2, y2)
         {
         }
 
-        public Rectangle(Pen p, int x1, int y1) : base(p, x1, y1)
+        public Rectangle(string colour, float lineWidth, int x1, int y1) : base(colour, lineWidth, x1, y1)
         {
         }
 
         public override void Draw(Graphics g)
         {
             (int x, int y, int w, int h) = EnclosingRectangle();
-            g.DrawRectangle(Pen, x, y, w, h);
+            g.DrawRectangle(Pen(), x, y, w, h);
         }
 
         public bool FullySurrounds(Shape s)
@@ -27,7 +30,7 @@ namespace OOPDraw
 
         public override Shape Clone()
         {
-            return new Rectangle(Pen, X1, Y1, X2, Y2);
+            return new Rectangle(Colour, LineWidth, X1, Y1, X2, Y2);
         }
     }
 }

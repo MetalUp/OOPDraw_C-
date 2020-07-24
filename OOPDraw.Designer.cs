@@ -37,6 +37,8 @@
             this.Shape = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.Action = new System.Windows.Forms.ComboBox();
+            this.SaveButton = new System.Windows.Forms.Button();
+            this.LoadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -144,11 +146,33 @@
             this.Action.TabIndex = 8;
             this.Action.SelectedIndexChanged += new System.EventHandler(this.Action_SelectedIndexChanged);
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(24, 359);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(112, 34);
+            this.SaveButton.TabIndex = 9;
+            this.SaveButton.Text = "Save";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Location = new System.Drawing.Point(24, 409);
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(112, 34);
+            this.LoadButton.TabIndex = 10;
+            this.LoadButton.Text = "Load";
+            this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            // 
             // OOPDraw
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 582);
+            this.Controls.Add(this.LoadButton);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.Action);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.Shape);
@@ -177,6 +201,8 @@
         private System.Windows.Forms.ComboBox Shape;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox Action;
+        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button LoadButton;
     }
 }
 

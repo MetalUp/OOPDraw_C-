@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -10,10 +11,11 @@ namespace OOPDraw
     {
         private List<Shape> Components { get; set; }
 
+        [JsonConstructor]
         public CompositeShape(List<Shape> components)
-            : base(new Pen(Color.Black, 1.0F), 0, 0, 0, 0)
+            : base("Black", 1.0F, 0, 0, 0, 0)
         {
-            Pen.DashStyle = DashStyle.Dash;
+            DashStyle = DashStyle.Dash;
             Components = components;
             CalculateEnclosingRectangle();
         }
@@ -32,7 +34,7 @@ namespace OOPDraw
             {
                 m.Draw(g);
             }
-            if (Selected) g.DrawRectangle(Pen, X1, Y1, X2 - X1, Y2 - Y1);
+            if (Selected) g.DrawRectangle(Pen(), X1, Y1, X2 - X1, Y2 - Y1);
         }
 
         public override void MoveBy(int xDelta, int yDelta)

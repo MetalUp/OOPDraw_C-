@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace OOPDraw
 {
@@ -13,14 +16,14 @@ namespace OOPDraw
         {
             InitializeComponent();
             DoubleBuffered = true; //Stops image flickering
-            currentPen = new Pen(Color.Black);
             LineWidth.SelectedItem = "Medium";
             Colour.SelectedItem = "Green";
             Shape.SelectedItem = "Line";
             Action.SelectedItem = "Draw";
         }
 
-        Pen currentPen;
+        string currentColour;
+        float currentLineWidth;
         bool dragging = false;
         Point startOfDrag = Point.Empty;
         Point lastMousePosition = Point.Empty;
@@ -47,8 +50,7 @@ namespace OOPDraw
                     AddShape(e);
                     break;
                 case "Select":
-                    Pen p = new Pen(Color.Black, 1.0F);
-                    selectionBox = new Rectangle(p, startOfDrag.X, startOfDrag.Y);
+                    selectionBox = new Rectangle("Black", 1.0F, startOfDrag.X, startOfDrag.Y);
                     break;
             }
         }
@@ -58,16 +60,16 @@ namespace OOPDraw
             switch (Shape.Text)
             {
                 case "Line":
-                    shapes.Add(new Line(currentPen, e.X, e.Y));
+                    shapes.Add(new Line(currentColour, currentLineWidth, e.X, e.Y));
                     break;
                 case "Rectangle":
-                    shapes.Add(new Rectangle(currentPen, e.X, e.Y));
+                    shapes.Add(new Rectangle(currentColour, currentLineWidth, e.X, e.Y));
                     break;
                 case "Ellipse":
-                    shapes.Add(new Ellipse(currentPen, e.X, e.Y));
+                    shapes.Add(new Ellipse(currentColour, currentLineWidth, e.X, e.Y));
                     break;
                 case "Circle":
-                    shapes.Add(new Circle(currentPen, e.X, e.Y));
+                    shapes.Add(new Circle(currentColour, currentLineWidth, e.X, e.Y));
                     break;
             }
         }
@@ -105,39 +107,23 @@ namespace OOPDraw
 
         private void LineWidth_SelectedIndexChanged(object sender, EventArgs e)
         {
-            float width = currentPen.Width;
             switch (LineWidth.Text)
             {
                 case "Thin":
-                    width = 2.0F;
+                    currentLineWidth = 2.0F;
                     break;
                 case "Medium":
-                    width = 4.0F;
+                    currentLineWidth = 4.0F;
                     break;
                 case "Thick":
-                    width = 8.0F;
+                    currentLineWidth = 8.0F;
                     break;
             }
-            currentPen = new Pen(currentPen.Color, width);
-
         }
 
         private void Colour_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Color color = currentPen.Color;
-            switch (Colour.Text)
-            {
-                case "Red":
-                    color = Color.Red;
-                    break;
-                case "Blue":
-                    color = Color.Blue;
-                    break;
-                case "Green":
-                    color = Color.Green;
-                    break;
-            }
-            currentPen = new Pen(color, currentPen.Width);
+            currentColour = Colour.Text;
         }
 
         private void DeselectAll()
@@ -221,5 +207,38 @@ namespace OOPDraw
             Refresh();
         }
 
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Text file|*.txt";
+            dialog.Title = "Save the Drawing";
+            dialog.ShowDialog();
+            if (dialog.FileName != "")
+            {
+                string json = JsonConvert.SerializeObject(shapes,  new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    Formatting = Formatting.Indented
+                });
+                File.WriteAllText(dialog.FileName, json);
+            }
+        }
+
+        private void LoadButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.ShowDialog();
+
+
+            using (StreamReader reader = new StreamReader(dialog.FileName))
+            {
+                string json = reader.ReadToEnd();
+                shapes = JsonConvert.DeserializeObject<List<Shape>>(json, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                });
+            }
+            Refresh();
+        }
     }
 }
